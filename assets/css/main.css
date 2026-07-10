@@ -1,0 +1,219 @@
+/* ============================================================
+   TIMEAAYI — SHARED NEO-BRUTALISM DESIGN SYSTEM
+   Loaded by every page. Page-specific styles live in each
+   page's own <style> block and build on these tokens.
+   ============================================================ */
+
+:root {
+  --black: #0a0a0a;
+  --white: #ffffff;
+  --yellow: #ffde00;
+  --blue: #2b5fff;
+  --orange: #ff5c00;
+  --pink: #ff3ea5;
+  --gray: #f2f0e9;
+
+  --border: 3px solid var(--black);
+  --border-thick: 4px solid var(--black);
+  --shadow-sm: 3px 3px 0px var(--black);
+  --shadow-md: 5px 5px 0px var(--black);
+  --shadow-lg: 8px 8px 0px var(--black);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  color: var(--black);
+  line-height: 1.5;
+}
+
+h1, h2, h3, .brand {
+  font-family: 'Archivo Black', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+}
+
+a { color: inherit; }
+
+:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+}
+
+/* ---------- Shared site header / nav ---------- */
+.site-header {
+  background: var(--white);
+  border-bottom: var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.site-nav {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 24px;
+}
+
+.site-logo {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 20px;
+  text-decoration: none;
+  color: var(--black);
+  background: var(--black);
+  padding: 6px 12px;
+  border: var(--border);
+  box-shadow: var(--shadow-sm);
+  white-space: nowrap;
+}
+.site-logo span { color: var(--yellow); }
+
+.nav-links {
+  display: flex;
+  gap: 28px;
+  list-style: none;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.nav-links a { text-decoration: none; position: relative; padding-bottom: 2px; }
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: -3px;
+  width: 0%;
+  height: 3px;
+  background: var(--orange);
+  transition: width 0.15s ease;
+}
+.nav-links a:hover::after, .nav-links a:focus-visible::after { width: 100%; }
+
+.auth-buttons { display: flex; gap: 12px; flex-shrink: 0; align-items: center; }
+
+/* ---------- Shared buttons ---------- */
+.btn {
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 10px 18px;
+  border: var(--border);
+  background: var(--white);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  text-decoration: none;
+  display: inline-block;
+  color: var(--black);
+}
+.btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0px var(--black); }
+.btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0px var(--black); }
+.btn:disabled { cursor: not-allowed; opacity: 0.5; transform: none; box-shadow: var(--shadow-sm); }
+
+.btn-primary { background: var(--orange); color: var(--white); }
+.btn-block { width: 100%; text-align: center; }
+
+.menu-toggle {
+  display: none;
+  border: var(--border);
+  background: var(--white);
+  box-shadow: var(--shadow-sm);
+  width: 42px;
+  height: 42px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ---------- Shared footer ---------- */
+.site-footer {
+  border-top: var(--border);
+  background: var(--white);
+  padding: 24px;
+}
+.footer-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* ---------- Shared form banner (errors / success) ---------- */
+.form-banner {
+  display: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 12px 14px;
+  border: 2px solid var(--black);
+  margin-bottom: 18px;
+}
+.form-banner.error { background: var(--black); color: var(--orange); }
+.form-banner.success { background: var(--black); color: var(--yellow); }
+.form-banner.show { display: block; }
+
+.field-error {
+  background: var(--black);
+  color: var(--orange);
+  padding: 5px 10px;
+  font-size: 0.75rem;
+  font-family: 'Space Mono', monospace;
+  border: 2px solid var(--black);
+  margin-top: 6px;
+  display: none;
+  text-transform: uppercase;
+}
+.field-error.show { display: block; }
+
+@media (max-width: 720px) {
+  .nav-links, .auth-buttons { display: none; }
+  .menu-toggle { display: block; }
+  .site-nav.open .nav-links {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--white);
+    border-top: var(--border);
+    border-bottom: var(--border);
+    padding: 20px 24px;
+    gap: 18px;
+  }
+  .site-nav.open .auth-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    position: absolute;
+    top: calc(100% + 168px);
+    left: 0;
+    right: 0;
+    background: var(--white);
+    padding: 0 24px 20px;
+    border-bottom: var(--border);
+  }
+}
