@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign In — Timeaayi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/main.css">
+<style>
+  body {
+    background: var(--yellow);
+    background-image:
+      linear-gradient(var(--black) 1px, transparent 1px),
+      linear-gradient(90deg, var(--black) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: -1px -1px;
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .page-body {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+  }
+
+  .auth-container {
+    background: var(--white);
+    border: var(--border);
+    box-shadow: var(--shadow-lg);
+    width: 100%;
+    max-width: 440px;
+    padding: 34px;
+  }
+
+  .eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--black);
+    color: var(--yellow);
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 16px;
+    border: var(--border);
+    box-shadow: var(--shadow-sm);
+  }
+
+  h2 { font-size: 2rem; margin-bottom: 8px; }
+  .auth-container > p.sub { font-size: 14px; margin-bottom: 24px; opacity: 0.75; }
+
+  .form-group { margin-bottom: 18px; display: flex; flex-direction: column; }
+
+  label {
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    font-weight: 700;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+
+  input {
+    padding: 12px 14px;
+    font-size: 1rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    border: 3px solid var(--black);
+    background: var(--white);
+    outline: none;
+  }
+  input:focus { background: #FAFAFA; box-shadow: 3px 3px 0px var(--black); }
+
+  .btn-submit {
+    margin-top: 6px;
+    font-size: 1.05rem;
+    padding: 14px;
+  }
+
+  .toggle-text {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 0.85rem;
+    font-family: 'Space Mono', monospace;
+  }
+  .toggle-link { color: var(--blue); text-decoration: underline; font-weight: 700; }
+
+  .last-login-note {
+    margin-top: 16px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    text-align: center;
+    opacity: 0.7;
+  }
+</style>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="site-nav">
+      <a href="index.html" class="site-logo brand">time<span>aayi</span></a>
+    </nav>
+  </header>
+
+  <div class="page-body">
+    <div class="auth-container">
+      <span class="eyebrow">Welcome back</span>
+      <h2>Sign In</h2>
+      <p class="sub">Log in to pick up right where you left off.</p>
+
+      <div class="form-banner error" id="formError">Something went wrong</div>
+
+      <form id="signInForm" novalidate>
+        <div class="form-group">
+          <label for="signInPhone">Phone Number</label>
+          <input type="tel" id="signInPhone" placeholder="10-digit phone number" autocomplete="tel" required>
+          <div class="field-error" id="signInPhoneError">Enter a valid 10-digit phone number</div>
+        </div>
+
+        <div class="form-group">
+          <label for="signInPassword">Password</label>
+          <input type="password" id="signInPassword" placeholder="••••••••" autocomplete="current-password" required>
+          <div class="field-error" id="signInPasswordError">Password is required</div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-submit" id="signInBtn">Let's Go →</button>
+
+        <p class="toggle-text">New here? <a href="signup.html" class="toggle-link">Sign Up instead</a></p>
+      </form>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span>Timeaayi © 2026</span>
+      <span>Built for students, by students</span>
+    </div>
+  </footer>
+
+<script src="assets/js/app.js"></script>
+<script>
+  const form = document.getElementById('signInForm');
+  const phoneInput = document.getElementById('signInPhone');
+  const passwordInput = document.getElementById('signInPassword');
+  const phoneError = document.getElementById('signInPhoneError');
+  const passwordError = document.getElementById('signInPasswordError');
+  const formError = document.getElementById('formError');
+  const submitBtn = document.getElementById('signInBtn');
+  const phoneRegex = /^\d{10}$/;
+
+  // If already logged in, no need to sign in again.
+  if (TimeaayiAuth.isLoggedIn()) {
+    window.location.href = 'select-course.html';
+  }
+
+  function showError(el) { el.classList.add('show'); }
+  function hideError(el) { el.classList.remove('show'); }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    hideError(formError);
+
+    let isValid = true;
+    if (!phoneRegex.test(phoneInput.value.trim())) { showError(phoneError); isValid = false; } else { hideError(phoneError); }
+    if (!passwordInput.value) { showError(passwordError); isValid = false; } else { hideError(passwordError); }
+    if (!isValid) return;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Signing in…';
+
+    try {
+      const res = await fetch(`${TIMEAAYI_CONFIG.API_BASE_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          phone: phoneInput.value.trim(),
+          password: passwordInput.value,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        formError.textContent = data.message || 'Sign in failed. Check your details and try again.';
+        showError(formError);
+        return;
+      }
+
+      TimeaayiAuth.saveSession(data.token, data.user);
+
+      const nextUrl = new URLSearchParams(window.location.search).get('next');
+      window.location.href = nextUrl || 'select-course.html';
+    } catch (err) {
+      console.error(err);
+      formError.textContent = 'Could not reach the server. Is the backend running?';
+      showError(formError);
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Let's Go →";
+    }
+  });
+</script>
+</body>
+</html>

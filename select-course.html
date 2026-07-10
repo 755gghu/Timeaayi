@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Find Your Resources — Timeaayi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/main.css">
+<style>
+  body {
+    background: var(--yellow);
+    background-image:
+      linear-gradient(var(--black) 1px, transparent 1px),
+      linear-gradient(90deg, var(--black) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: -1px -1px;
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .page-body {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+  }
+
+  .wrap { width: 100%; max-width: 620px; }
+
+  .eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--black);
+    color: var(--yellow);
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 16px;
+    border: var(--border);
+    box-shadow: var(--shadow-sm);
+  }
+
+  h1 { font-size: clamp(28px, 5vw, 42px); line-height: 1.05; margin-bottom: 10px; }
+  .sub { font-size: 16px; margin-bottom: 28px; max-width: 46ch; }
+
+  .card {
+    background: var(--white);
+    border: var(--border);
+    box-shadow: var(--shadow-lg);
+    padding: 28px;
+  }
+
+  .step {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 18px 0;
+    border-bottom: 3px solid var(--black);
+    transition: opacity 0.15s ease;
+  }
+  .step:last-of-type { border-bottom: none; padding-bottom: 6px; }
+  .step.disabled { opacity: 0.35; pointer-events: none; }
+
+  .step-num {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 20px;
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    background: var(--yellow);
+    border: 3px solid var(--black);
+    box-shadow: 3px 3px 0px var(--black);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .step.done .step-num { background: var(--blue); color: var(--white); }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  label {
+    display: block;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+
+  select {
+    width: 100%;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 12px 14px;
+    border: 3px solid var(--black);
+    background: var(--white)
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%230a0a0a' stroke-width='2' fill='none'/%3E%3C/svg%3E")
+      no-repeat right 16px center;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    box-shadow: 3px 3px 0px var(--black);
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+  }
+  select:disabled { cursor: not-allowed; background-color: var(--gray); }
+  select:not(:disabled):hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0px var(--black); }
+  select:not(:disabled):focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+
+  .submit-row { margin-top: 24px; }
+
+  button.submit {
+    width: 100%;
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 18px;
+    color: var(--white);
+    background: var(--black);
+    border: var(--border);
+    padding: 16px;
+    cursor: pointer;
+    box-shadow: var(--shadow-md);
+    transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+  }
+  button.submit:disabled { background: #9a9a9a; cursor: not-allowed; box-shadow: var(--shadow-md); }
+  button.submit:not(:disabled):hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0px var(--black); background: var(--blue); }
+  button.submit:not(:disabled):active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--black); }
+
+  .hint { font-family: 'Space Mono', monospace; font-size: 12px; margin-top: 12px; text-align: center; opacity: 0.7; }
+
+  @media (max-width: 480px) {
+    .card { padding: 20px; }
+    .step { gap: 10px; }
+  }
+</style>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="site-nav" id="siteNav">
+      <a href="index.html" class="site-logo brand">time<span>aayi</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html#offer">Notes</a></li>
+        <li><a href="index.html#offer">Classes</a></li>
+        <li><a href="index.html#offer">Question Papers</a></li>
+      </ul>
+      <div class="auth-buttons" id="authButtons">
+        <a href="signin.html" class="btn">Sign In</a>
+        <a href="signup.html" class="btn btn-primary">Sign Up</a>
+      </div>
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu" aria-expanded="false">☰</button>
+    </nav>
+  </header>
+
+  <div class="page-body">
+    <div class="wrap">
+      <span class="eyebrow">Step-by-step</span>
+      <h1>Where do you study?</h1>
+      <p class="sub">Pick your university, course, and semester in order. We'll take you straight to your notes, classes, and question papers.</p>
+
+      <form class="card" id="selectForm" novalidate>
+        <div class="step" id="stepUniversity">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <label for="university">University</label>
+            <select id="university" required>
+              <option value="" disabled selected>Select your university</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="step disabled" id="stepCourse">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <label for="course">Course</label>
+            <select id="course" required disabled>
+              <option value="" disabled selected>Select university first</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="step disabled" id="stepSemester">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <label for="semester">Semester</label>
+            <select id="semester" required disabled>
+              <option value="" disabled selected>Select course first</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="submit-row">
+          <button type="submit" class="submit" id="submitBtn" disabled>Show my resources →</button>
+          <p class="hint">// notes · classes · question papers, all in one place</p>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span>Timeaayi © 2026</span>
+      <span>Built for students, by students</span>
+    </div>
+  </footer>
+
+<script src="assets/js/app.js"></script>
+<script>
+  // ---- Mock data ----
+  // Placeholder dataset. Swap DATA for a real API response later —
+  // the render logic below only assumes this shape:
+  // { university: { label, courses: { course: { label, semesters: n } } } }
+  const DATA = {
+    calicut: {
+      label: "University of Calicut",
+      courses: {
+        bsc_cs: { label: "B.Sc. Computer Science", semesters: 6 },
+        bca: { label: "BCA", semesters: 6 },
+        bcom: { label: "B.Com", semesters: 6 },
+      },
+    },
+    anna: {
+      label: "Anna University",
+      courses: {
+        btech_cse: { label: "B.Tech CSE", semesters: 8 },
+        btech_ece: { label: "B.Tech ECE", semesters: 8 },
+        mca: { label: "MCA", semesters: 4 },
+      },
+    },
+    delhi: {
+      label: "University of Delhi",
+      courses: {
+        ba_eco: { label: "B.A. (Hons) Economics", semesters: 6 },
+        bsc_math: { label: "B.Sc. (Hons) Mathematics", semesters: 6 },
+      },
+    },
+  };
+
+  const uniSelect = document.getElementById('university');
+  const courseSelect = document.getElementById('course');
+  const semSelect = document.getElementById('semester');
+  const stepCourse = document.getElementById('stepCourse');
+  const stepSemester = document.getElementById('stepSemester');
+  const submitBtn = document.getElementById('submitBtn');
+
+  function fillOptions(select, placeholder) {
+    select.innerHTML = `<option value="" disabled selected>${placeholder}</option>`;
+  }
+
+  Object.entries(DATA).forEach(([key, uni]) => {
+    const opt = document.createElement('option');
+    opt.value = key;
+    opt.textContent = uni.label;
+    uniSelect.appendChild(opt);
+  });
+
+  uniSelect.addEventListener('change', () => {
+    const uni = DATA[uniSelect.value];
+    fillOptions(courseSelect, 'Select your course');
+    Object.entries(uni.courses).forEach(([key, course]) => {
+      const opt = document.createElement('option');
+      opt.value = key;
+      opt.textContent = course.label;
+      courseSelect.appendChild(opt);
+    });
+    courseSelect.disabled = false;
+    stepCourse.classList.remove('disabled');
+    document.getElementById('stepUniversity').classList.add('done');
+
+    semSelect.disabled = true;
+    fillOptions(semSelect, 'Select course first');
+    stepSemester.classList.add('disabled');
+    stepCourse.classList.remove('done');
+    submitBtn.disabled = true;
+  });
+
+  courseSelect.addEventListener('change', () => {
+    const uni = DATA[uniSelect.value];
+    const course = uni.courses[courseSelect.value];
+    fillOptions(semSelect, 'Select your semester');
+    for (let i = 1; i <= course.semesters; i++) {
+      const opt = document.createElement('option');
+      opt.value = i;
+      opt.textContent = `Semester ${i}`;
+      semSelect.appendChild(opt);
+    }
+    semSelect.disabled = false;
+    stepSemester.classList.remove('disabled');
+    stepCourse.classList.add('done');
+    submitBtn.disabled = true;
+  });
+
+  semSelect.addEventListener('change', () => {
+    stepSemester.classList.add('done');
+    submitBtn.disabled = false;
+  });
+
+  document.getElementById('selectForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!uniSelect.value || !courseSelect.value || !semSelect.value) return;
+
+    const uni = DATA[uniSelect.value];
+    const course = uni.courses[courseSelect.value];
+
+    const params = new URLSearchParams({
+      university: uniSelect.value,
+      universityLabel: uni.label,
+      course: courseSelect.value,
+      courseLabel: course.label,
+      semester: semSelect.value,
+    });
+
+    window.location.href = `resources.html?${params.toString()}`;
+  });
+
+  // ---- Shared header behavior ----
+  const menuToggle = document.getElementById('menuToggle');
+  const nav = document.getElementById('siteNav');
+  menuToggle.addEventListener('click', () => {
+    const isOpen = nav.classList.toggle('open');
+    menuToggle.setAttribute('aria-expanded', isOpen);
+    menuToggle.textContent = isOpen ? '✕' : '☰';
+  });
+  TimeaayiAuth.renderAuthButtons('authButtons');
+</script>
+</body>
+</html>

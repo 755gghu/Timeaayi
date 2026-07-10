@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up — Timeaayi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/main.css">
+<style>
+  body {
+    background: var(--yellow);
+    background-image:
+      linear-gradient(var(--black) 1px, transparent 1px),
+      linear-gradient(90deg, var(--black) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: -1px -1px;
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .page-body {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+  }
+
+  .auth-container {
+    background: var(--white);
+    border: var(--border);
+    box-shadow: var(--shadow-lg);
+    width: 100%;
+    max-width: 460px;
+    padding: 34px;
+  }
+
+  .eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--black);
+    color: var(--yellow);
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 16px;
+    border: var(--border);
+    box-shadow: var(--shadow-sm);
+  }
+
+  h2 { font-size: 2rem; margin-bottom: 8px; }
+  .auth-container > p.sub { font-size: 14px; margin-bottom: 24px; opacity: 0.75; }
+
+  .form-group { margin-bottom: 18px; display: flex; flex-direction: column; }
+
+  label {
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    font-weight: 700;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+
+  input {
+    padding: 12px 14px;
+    font-size: 1rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    border: 3px solid var(--black);
+    background: var(--white);
+    outline: none;
+  }
+  input:focus { background: #FAFAFA; box-shadow: 3px 3px 0px var(--black); }
+
+  .hint-text { font-size: 11px; font-family: 'Space Mono', monospace; opacity: 0.6; margin-top: 6px; }
+
+  .btn-submit { margin-top: 6px; font-size: 1.05rem; padding: 14px; }
+
+  .toggle-text { margin-top: 20px; text-align: center; font-size: 0.85rem; font-family: 'Space Mono', monospace; }
+  .toggle-link { color: var(--blue); text-decoration: underline; font-weight: 700; }
+</style>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="site-nav">
+      <a href="index.html" class="site-logo brand">time<span>aayi</span></a>
+    </nav>
+  </header>
+
+  <div class="page-body">
+    <div class="auth-container">
+      <span class="eyebrow">Join for free</span>
+      <h2>Sign Up</h2>
+      <p class="sub">Create an account to save your course and jump straight to your resources next time.</p>
+
+      <div class="form-banner error" id="formError">Something went wrong</div>
+
+      <form id="signUpForm" novalidate>
+        <div class="form-group">
+          <label for="signUpName">Full Name</label>
+          <input type="text" id="signUpName" placeholder="Your Name" autocomplete="name" required>
+          <div class="field-error" id="signUpNameError">Enter your name</div>
+        </div>
+
+        <div class="form-group">
+          <label for="signUpEmail">Email ID</label>
+          <input type="text" id="signUpEmail" placeholder="you@domain.com" autocomplete="email" required>
+          <div class="field-error" id="signUpEmailError">Please enter a valid email address</div>
+        </div>
+
+        <div class="form-group">
+          <label for="signUpPhone">Phone Number</label>
+          <input type="tel" id="signUpPhone" placeholder="10-digit number" autocomplete="tel" required>
+          <div class="field-error" id="signUpPhoneError">Invalid phone number (requires 10 digits)</div>
+        </div>
+
+        <div class="form-group">
+          <label for="signUpPassword">Set Password</label>
+          <input type="password" id="signUpPassword" placeholder="••••••••" autocomplete="new-password" required>
+          <p class="hint-text">At least 8 characters.</p>
+          <div class="field-error" id="signUpPasswordError">Password must be at least 8 characters</div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-submit" id="signUpBtn">Register ↵</button>
+
+        <p class="toggle-text">Already registered? <a href="signin.html" class="toggle-link">Sign In instead</a></p>
+      </form>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span>Timeaayi © 2026</span>
+      <span>Built for students, by students</span>
+    </div>
+  </footer>
+
+<script src="assets/js/app.js"></script>
+<script>
+  const form = document.getElementById('signUpForm');
+  const nameInput = document.getElementById('signUpName');
+  const emailInput = document.getElementById('signUpEmail');
+  const phoneInput = document.getElementById('signUpPhone');
+  const passwordInput = document.getElementById('signUpPassword');
+
+  const nameError = document.getElementById('signUpNameError');
+  const emailError = document.getElementById('signUpEmailError');
+  const phoneError = document.getElementById('signUpPhoneError');
+  const passwordError = document.getElementById('signUpPasswordError');
+  const formError = document.getElementById('formError');
+  const submitBtn = document.getElementById('signUpBtn');
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const phoneRegex = /^\d{10}$/;
+
+  if (TimeaayiAuth.isLoggedIn()) {
+    window.location.href = 'select-course.html';
+  }
+
+  function showError(el) { el.classList.add('show'); }
+  function hideError(el) { el.classList.remove('show'); }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    hideError(formError);
+
+    let isValid = true;
+    if (!nameInput.value.trim()) { showError(nameError); isValid = false; } else { hideError(nameError); }
+    if (!emailRegex.test(emailInput.value.trim())) { showError(emailError); isValid = false; } else { hideError(emailError); }
+    if (!phoneRegex.test(phoneInput.value.trim())) { showError(phoneError); isValid = false; } else { hideError(phoneError); }
+    if (passwordInput.value.length < 8) { showError(passwordError); isValid = false; } else { hideError(passwordError); }
+    if (!isValid) return;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Creating account…';
+
+    try {
+      const res = await fetch(`${TIMEAAYI_CONFIG.API_BASE_URL}/auth/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: nameInput.value.trim(),
+          email: emailInput.value.trim(),
+          phone: phoneInput.value.trim(),
+          password: passwordInput.value,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        formError.textContent = data.message || 'Could not create your account. Try again.';
+        showError(formError);
+        return;
+      }
+
+      TimeaayiAuth.saveSession(data.token, data.user);
+      window.location.href = 'select-course.html';
+    } catch (err) {
+      console.error(err);
+      formError.textContent = 'Could not reach the server. Is the backend running?';
+      showError(formError);
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Register ↵';
+    }
+  });
+</script>
+</body>
+</html>
