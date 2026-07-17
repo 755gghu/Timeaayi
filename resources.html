@@ -46,7 +46,44 @@
   main { max-width: 1000px; margin: 0 auto; padding: 24px 24px 80px; }
 
   h1 { font-size: clamp(26px, 4vw, 36px); margin-bottom: 6px; }
-  .subhead { font-size: 15px; margin-bottom: 28px; opacity: 0.8; }
+  .subhead { font-size: 15px; margin-bottom: 20px; opacity: 0.8; }
+
+  /* ---------- Syllabus button ---------- */
+  .syllabus-row { margin-bottom: 24px; }
+
+  .syllabus-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    background: var(--black);
+    color: var(--yellow);
+    border: var(--border);
+    padding: 12px 20px;
+    box-shadow: var(--shadow-md);
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+  }
+  .syllabus-btn:hover { transform: translate(-3px, -3px); box-shadow: 8px 8px 0px var(--black); }
+  .syllabus-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--black); }
+  .syllabus-btn .icon { font-size: 16px; }
+
+  .placeholder-note {
+    display: none;
+    margin-top: 10px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    background: var(--white);
+    border: 2px dashed var(--black);
+    padding: 8px 12px;
+    max-width: fit-content;
+  }
+  .placeholder-note.show { display: block; }
 
   .tabs { display: flex; gap: 10px; margin-bottom: 28px; flex-wrap: wrap; }
 
@@ -72,44 +109,67 @@
   .tab.active[data-tab="classes"] { background: var(--blue); color: var(--white); }
   .tab.active[data-tab="notes"] { background: var(--yellow); }
   .tab.active[data-tab="papers"] { background: var(--orange); color: var(--white); }
-  .tab.active .count { background: var(--white); color: var(--black); }
 
   .panel { display: none; }
   .panel.active { display: block; }
 
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; }
+  /* ---------- Subject list (replaces the old resource-card grid) ---------- */
+  .subject-list { display: flex; flex-direction: column; gap: 16px; }
 
-  .card {
+  .subject-card {
     background: var(--white);
     border: var(--border);
     box-shadow: var(--shadow-md);
     padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
     transition: transform 0.1s ease, box-shadow 0.1s ease;
   }
-  .card:hover { transform: translate(-3px, -3px); box-shadow: var(--shadow-lg); }
+  .subject-card:hover { transform: translate(-3px, -3px); box-shadow: var(--shadow-lg); }
 
   .card-tag {
     font-family: 'Space Mono', monospace;
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
-    align-self: flex-start;
+    display: inline-block;
     padding: 3px 8px;
     border: 2px solid var(--black);
+    margin-bottom: 10px;
   }
   .panel[data-panel="classes"] .card-tag { background: var(--blue); color: var(--white); }
   .panel[data-panel="notes"] .card-tag { background: var(--yellow); }
   .panel[data-panel="papers"] .card-tag { background: var(--orange); color: var(--white); }
 
-  .card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 700; line-height: 1.3; }
-  .card .meta { font-family: 'Space Mono', monospace; font-size: 12px; opacity: 0.75; }
-  .card .actions { margin-top: auto; padding-top: 8px; }
+  .subject-card h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 14px;
+  }
 
-  .card .btn { font-size: 13px; padding: 7px 14px; box-shadow: 3px 3px 0px var(--black); }
-  .card .btn:hover { box-shadow: 5px 5px 0px var(--black); }
+  .module-row { display: flex; flex-wrap: wrap; gap: 10px; }
+
+  .module-btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    background: var(--white);
+    border: 2px solid var(--black);
+    padding: 8px 14px;
+    box-shadow: 3px 3px 0px var(--black);
+    text-decoration: none;
+    color: var(--black);
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
+  }
+  .module-btn:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0px var(--black); background: var(--gray); }
+  .module-btn:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0px var(--black); }
+
+  .panel[data-panel="classes"] .module-btn:hover { background: var(--blue); color: var(--white); }
+  .panel[data-panel="notes"] .module-btn:hover { background: var(--yellow); }
+  .panel[data-panel="papers"] .module-btn:hover { background: var(--orange); color: var(--white); }
 
   .empty {
     border: 3px dashed var(--black);
@@ -118,6 +178,17 @@
     font-family: 'Space Mono', monospace;
     font-size: 14px;
     opacity: 0.75;
+  }
+
+  .fallback-flag {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    background: var(--orange);
+    color: var(--white);
+    border: 2px solid var(--black);
+    padding: 4px 8px;
+    display: inline-block;
+    margin-bottom: 16px;
   }
 
   @media (max-width: 600px) {
@@ -149,6 +220,13 @@
     <h1 id="pageTitle">Your resources</h1>
     <p class="subhead" id="pageSub">Everything for this semester, in one place.</p>
 
+    <div id="fallbackFlag"></div>
+
+    <div class="syllabus-row">
+      <a href="#" class="syllabus-btn" id="syllabusBtn"><span class="icon">📄</span> View Syllabus</a>
+      
+    </div>
+
     <div class="tabs">
       <button class="tab active" data-tab="classes">Classes <span class="count" id="countClasses">0</span></button>
       <button class="tab" data-tab="notes">Notes <span class="count" id="countNotes">0</span></button>
@@ -156,15 +234,15 @@
     </div>
 
     <section class="panel active" data-panel="classes">
-      <div class="grid" id="gridClasses"></div>
+      <div class="subject-list" id="gridClasses"></div>
     </section>
 
     <section class="panel" data-panel="notes">
-      <div class="grid" id="gridNotes"></div>
+      <div class="subject-list" id="gridNotes"></div>
     </section>
 
     <section class="panel" data-panel="papers">
-      <div class="grid" id="gridPapers"></div>
+      <div class="subject-list" id="gridPapers"></div>
     </section>
   </main>
 
@@ -178,10 +256,15 @@
 <script src="assets/js/app.js"></script>
 <script>
   // ---- Read selection from URL ----
+  // select-course.html already sends both the machine key (university/course)
+  // and the display label (universityLabel/courseLabel) — we need the keys
+  // to look up real syllabus data, and the labels just for the breadcrumb text.
   const params = new URLSearchParams(window.location.search);
+  const universityKey   = params.get('university') || '';
+  const courseKey       = params.get('course') || '';
   const universityLabel = params.get('universityLabel') || 'Your University';
-  const courseLabel = params.get('courseLabel') || 'Your Course';
-  const semester = params.get('semester') || '1';
+  const courseLabel     = params.get('courseLabel') || 'Your Course';
+  const semester        = parseInt(params.get('semester') || '1', 10);
 
   document.getElementById('breadcrumb').innerHTML = `
     <span class="crumb">${universityLabel}</span>
@@ -191,59 +274,235 @@
   document.getElementById('pageSub').textContent =
     `${courseLabel} · Semester ${semester} · ${universityLabel}`;
 
-  // ---- Mock resource data ----
-  // Placeholder content, not yet filtered by a real backend against the
-  // selected university/course/semester. Swap these three arrays for an
-  // API call keyed on (university, course, semester) later.
-  const SUBJECTS = ['Data Structures', 'Digital Logic', 'Discrete Mathematics', 'Operating Systems'];
+  // =====================================================================
+  // SYLLABUS DATA
+  // Real data below is sourced from University of Calicut syllabi (CUFYUGP
+  // Regulations 2024, w.e.f. 2024 admission) for BCA Honours and BSc Computer
+  // Science Honours. Only core/compulsory Major courses are listed per
+  // semester — Discipline Specific Elective "baskets" (specialisation tracks
+  // in sem 5–8) are collapsed to a single generic "Elective Course N" entry,
+  // and BSc CS's Minor/Multi-Disciplinary course slots (which depend on each
+  // student's individual pick, not a fixed CS subject) are omitted rather
+  // than guessed.
+  //
+  // Every other university/course combination in select-course.html
+  // (Anna University, University of Delhi, BCom, and both courses' elective
+  // specialisation tracks) has NO real syllabus behind it yet — those fall
+  // through to FALLBACK_SUBJECTS below. Swap in real data here once you have
+  // the syllabus PDFs for those too.
+  // =====================================================================
+  const SYLLABUS = {
+    calicut: {
+      bca: {
+        1: [
+          { code: 'BCA1CJ101', name: 'Fundamentals of Computers and Computational Thinking' },
+          { code: 'BCA1CJ102', name: 'Mathematical Foundation for Computer Applications' },
+          { code: 'BCA1CJ103', name: 'Discrete Structures for Computer Applications' },
+          { code: 'BCA1FM105', name: 'Digital Marketing' },
+          { code: 'BCA1FS111', name: 'Introduction to Computers and Office Automation' },
+          { code: 'ENG1FA101', name: 'English' },
+        ],
+        2: [
+          { code: 'BCA2CJ101', name: 'Fundamentals of Programming (C Language)' },
+          { code: 'BCA2CJ102', name: 'Statistical Foundation for Computer Applications' },
+          { code: 'BCA2CJ103', name: 'Numerical Analysis and Optimization Techniques' },
+          { code: 'BCA2FS112', name: 'Data Analysis using Spread Sheet' },
+          { code: 'ENG2FA103', name: 'English' },
+        ],
+        3: [
+          { code: 'BCA3CJ201', name: 'Data Structures using C' },
+          { code: 'BCA3CJ202', name: 'Computer Networks' },
+          { code: 'BCA3CJ203', name: 'Introduction to Data Science' },
+          { code: 'BCA3CJ204', name: 'Foundations of Artificial Intelligence' },
+          { code: 'BCA3FS113', name: 'Website Designing using Content Management System' },
+          { code: 'BCA3MDE102', name: 'Kerala Knowledge System' },
+        ],
+        4: [
+          { code: 'BCA4CJ205', name: 'Database Management System' },
+          { code: 'BCA4CJ206', name: 'Python Programming' },
+          { code: 'BCA4CJ207', name: 'Software Engineering' },
+          { code: 'BCA4CJ208', name: 'Automation and Robotics' },
+          { code: 'BCA4FV108', name: 'Introduction to Cyber Laws' },
+          { code: 'ENG4FV109', name: 'English' },
+        ],
+        5: [
+          { code: 'BCA5CJ301', name: 'Object Oriented Programming (Java)' },
+          { code: 'BCA5CJ302', name: 'Progressive Web Application using PHP' },
+          { code: 'BCA5CJ303', name: 'Digital Fundamentals and Computer Organization' },
+          { code: 'BCA5EJ301', name: 'Elective Course 1 in Major' },
+          { code: 'BCA5EJ302', name: 'Elective Course 2 in Major' },
+        ],
+        6: [
+          { code: 'BCA6CJ304', name: 'Introduction to AI and ML' },
+          { code: 'BCA6CJ305', name: 'Principles of Operating System' },
+          { code: 'BCA6EJ303', name: 'Elective Course 3 in Major' },
+          { code: 'BCA6EJ304', name: 'Elective Course 4 in Major' },
+          { code: 'BCA6FV110', name: 'Business Intelligence and Innovation' },
+        ],
+        7: [
+          { code: 'BCA7CJ401', name: 'Advanced Data Structures and Algorithms' },
+          { code: 'BCA7CJ402', name: 'Data Science Programming using R' },
+          { code: 'BCA7EJ401', name: 'Elective Course 5 in Major' },
+          { code: 'BCA7EJ402', name: 'Elective Course 6 in Major' },
+          { code: 'BCA7OE401', name: 'Open Elective in Major' },
+        ],
+        8: [
+          { code: 'BCA8EJ404', name: 'Elective Course 8 in Major' },
+          { code: 'BCA8EJ405', name: 'Elective Course 9 in Major' },
+          { code: 'BCA8EJ406', name: 'Elective Course 10 in Major' },
+          { code: 'BCA8FS118', name: 'Project' },
+        ],
+      },
+      // BSc Computer Science Honours — same CUFYUGP 2024 scheme, from BSc_2024.pdf.
+      // Minor-discipline courses ("Minor Course 1", etc.) are skipped since they
+      // depend on each student's chosen minor and aren't fixed CS subjects.
+      bsc_cs: {
+        1: [
+          { code: 'CSC1CJ101', name: 'Fundamentals of Computers & Computational Thinking' },
+          { code: 'ENG1FA101', name: 'English' },
+        ],
+        2: [
+          { code: 'CSC2CJ101', name: 'Fundamentals of Programming (C Language)' },
+          { code: 'ENG2FA103', name: 'English' },
+        ],
+        3: [
+          { code: 'CSC3CJ201', name: 'Software Project Management' },
+          { code: 'CSC3CJ202', name: 'Data Structures and Algorithm' },
+          { code: 'XXX3FM107', name: 'Kerala Knowledge System' },
+          { code: 'ENG3FV108', name: 'Value-Added Course 1' },
+        ],
+        4: [
+          { code: 'CSC4CJ203', name: 'Database Management System' },
+          { code: 'CSC4CJ204', name: 'Python Programming' },
+          { code: 'CSC4CJ205', name: 'Computer Networks' },
+          { code: 'ENG4FV109', name: 'Value-Added Course 2' },
+          { code: 'XXX4FV110', name: 'Value-Added Course 3' },
+          { code: 'ENG4FS111', name: 'Skill Enhancement Course 1 (P)' },
+        ],
+        5: [
+          { code: 'CSC5CJ301', name: 'Data Mining' },
+          { code: 'CSC5CJ302', name: 'Object Oriented Programming (Java)' },
+          { code: 'CSC5CJ303', name: 'Full Stack Web Development' },
+          { code: 'CSC5EJ305', name: 'Elective Course 1 in Major' },
+          { code: 'CSC5EJ306', name: 'Elective Course 2 in Major' },
+          { code: 'CSC5FS112', name: 'Introduction to Digital Marketing' },
+        ],
+        6: [
+          { code: 'CSC6CJ304', name: 'Digital Electronics and Computer Architecture' },
+          { code: 'CSC6CJ305', name: 'Principles of Operating Systems' },
+          { code: 'CSC6CJ306', name: 'Introduction to Artificial Intelligence & Machine Learning' },
+          { code: 'CSC6CJ311', name: 'Elective Course 3 in Major' },
+          { code: 'CSC6CJ312', name: 'Elective Course 4 in Major' },
+          { code: 'CSC6FS113', name: 'Project Implementation' },
+          { code: 'CSC6CJ349', name: 'Internship in Major' },
+        ],
+        7: [
+          { code: 'CSC7CJ401', name: 'Theory of Computation' },
+          { code: 'CSC7CJ402', name: 'System Security' },
+          { code: 'CSC7CJ403', name: 'Advanced Data Structures and Algorithms' },
+          { code: 'CSC7CJ404', name: 'Block Chain Technology' },
+          { code: 'CSC7CJ405', name: 'Internet of Things' },
+        ],
+        8: [
+          { code: 'CSC8CJ406', name: 'Compiler Design' },
+          { code: 'CSC8CJ407', name: 'Client-Server Architecture' },
+          { code: 'CSC8CJ408', name: 'Parallel Computing' },
+          { code: 'CSC8EJXXX-5', name: 'Elective Course 5 in Major' },
+          { code: 'CSC8EJXXX-6', name: 'Elective Course 6 in Major' },
+          { code: 'CSC8EJXXX-7', name: 'Elective Course 7 in Major' },
+        ],
+      },
+    },
+  };
 
-  const classes = [
-    { subject: SUBJECTS[0], title: 'Arrays & Linked Lists — Full Lecture', meta: '48 min · Recorded 12 Jun' },
-    { subject: SUBJECTS[1], title: 'Boolean Algebra Basics', meta: '35 min · Recorded 10 Jun' },
-    { subject: SUBJECTS[2], title: 'Graph Theory Intro', meta: '52 min · Recorded 8 Jun' },
-    { subject: SUBJECTS[3], title: 'Process Scheduling Explained', meta: '41 min · Recorded 5 Jun' },
-  ];
+  // Used whenever SYLLABUS has no entry for the chosen university/course.
+  // Clearly labeled as placeholder so it's obvious in the UI it isn't real.
+  function fallbackSubjects(sem) {
+    return [
+      { code: `SUB${sem}01`, name: 'Subject 1 (placeholder — add real syllabus)' },
+      { code: `SUB${sem}02`, name: 'Subject 2 (placeholder — add real syllabus)' },
+      { code: `SUB${sem}03`, name: 'Subject 3 (placeholder — add real syllabus)' },
+      { code: `SUB${sem}04`, name: 'Subject 4 (placeholder — add real syllabus)' },
+    ];
+  }
 
-  const notes = [
-    { subject: SUBJECTS[0], title: 'Unit 1 — Arrays, Stacks & Queues', meta: '18 pages · PDF' },
-    { subject: SUBJECTS[0], title: 'Unit 2 — Trees & Graphs', meta: '24 pages · PDF' },
-    { subject: SUBJECTS[1], title: 'Unit 1 — Number Systems', meta: '12 pages · PDF' },
-    { subject: SUBJECTS[2], title: 'Unit 3 — Combinatorics', meta: '20 pages · PDF' },
-    { subject: SUBJECTS[3], title: 'Unit 1 — Process Management', meta: '16 pages · PDF' },
-  ];
+  let usingFallback = false;
+  function getSubjects() {
+    const bySem = SYLLABUS[universityKey]?.[courseKey]?.[semester];
+    if (bySem) return bySem;
+    usingFallback = true;
+    return fallbackSubjects(semester);
+  }
 
-  const papers = [
-    { subject: SUBJECTS[0], title: 'End Semester Exam 2025', meta: 'Regular · 3 hrs' },
-    { subject: SUBJECTS[1], title: 'Mid Semester Exam 2025', meta: 'Regular · 1.5 hrs' },
-    { subject: SUBJECTS[2], title: 'End Semester Exam 2024', meta: 'Supplementary · 3 hrs' },
-    { subject: SUBJECTS[3], title: 'End Semester Exam 2025', meta: 'Regular · 3 hrs' },
-  ];
+  const subjects = getSubjects();
 
-  function renderGrid(gridId, items, tag) {
+  if (usingFallback) {
+    document.getElementById('fallbackFlag').innerHTML =
+      `<span class="fallback-flag">⚠ Placeholder subjects — real syllabus not added for this university/course yet</span>`;
+  }
+
+  // ---- Module / year labels for the 5 buttons per subject ----
+  const MODULES = ['Module 1', 'Module 2', 'Module 3', 'Module 4', 'Module 5'];
+
+  const CURRENT_YEAR = new Date().getFullYear();
+  const YEARS = Array.from({ length: 5 }, (_, i) => CURRENT_YEAR - i); // last 5 years, newest first
+
+  // ---- Render a subject list for one tab ----
+  // kind: 'classes' | 'notes' | 'papers' — determines button labels and tag color (via CSS)
+  function renderSubjectList(gridId, kind) {
     const grid = document.getElementById(gridId);
-    if (!items.length) {
+    if (!subjects.length) {
       grid.innerHTML = `<div class="empty">Nothing uploaded here yet. Check back soon, or be the first to add one.</div>`;
       return;
     }
-    grid.innerHTML = items.map(item => `
-      <div class="card">
-        <span class="card-tag">${item.subject}</span>
-        <h3>${item.title}</h3>
-        <span class="meta">${item.meta}</span>
-        <div class="actions">
-          <a href="#" class="btn">${tag}</a>
+
+    grid.innerHTML = subjects.map(sub => {
+      const buttons = (kind === 'papers' ? YEARS : MODULES)
+        .map(label => `<a href="#" class="module-btn" data-subject="${sub.code}" data-kind="${kind}" data-item="${label}">${label}</a>`)
+        .join('');
+
+      return `
+        <div class="subject-card">
+          <span class="card-tag">${sub.code}</span>
+          <h3>${sub.name}</h3>
+          <div class="module-row">${buttons}</div>
         </div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
   }
 
-  renderGrid('gridClasses', classes, 'Watch');
-  renderGrid('gridNotes', notes, 'Download');
-  renderGrid('gridPapers', papers, 'Download');
+  renderSubjectList('gridClasses', 'classes');
+  renderSubjectList('gridNotes', 'notes');
+  renderSubjectList('gridPapers', 'papers');
 
-  document.getElementById('countClasses').textContent = classes.length;
-  document.getElementById('countNotes').textContent = notes.length;
-  document.getElementById('countPapers').textContent = papers.length;
+  document.getElementById('countClasses').textContent = subjects.length;
+  document.getElementById('countNotes').textContent = subjects.length;
+  document.getElementById('countPapers').textContent = subjects.length;
+
+  // ---- Placeholder click handling ----
+  // Every module/year button and the syllabus button are placeholders
+  // (href="#") until real file URLs / an API exist. Clicking just logs
+  // what was requested — swap this for real navigation once resources
+  // are actually hosted somewhere.
+  document.querySelectorAll('.module-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      console.log(`Requested ${btn.dataset.kind} → ${btn.dataset.subject} → ${btn.dataset.item}`);
+    });
+  });
+
+  document.getElementById('syllabusBtn').addEventListener('click', (e) => {
+  // Check if the selected university is Calicut and the course is BCA
+  if (universityKey === 'calicut' && courseKey === 'bca') {
+    // Let the browser open the URL naturally (or forcefully if you want a new tab)
+    window.open('https://drive.google.com/file/d/1dq8t7j201DmkhLl5CorayiD2weAu5RzY/view?pli=1', '_blank');
+  } else {
+    // Fallback behavior for other courses/universities
+    e.preventDefault();
+    const note = document.getElementById('syllabusNote');
+    if (note) note.classList.toggle('show');
+  }
+});
 
   // ---- Tabs ----
   const tabs = document.querySelectorAll('.tab');
