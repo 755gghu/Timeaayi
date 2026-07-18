@@ -36,15 +36,19 @@ window.COURSE_DATA = {
         links: {
           classes: {
             'Module 1': 'https://drive.google.com/file/d/1dq8t7j201DmkhLl5CorayiD2weAu5RzY/view?pli=1', 
-            'Module 2': '#',
-            'Module 3': '#',
-            'Module 4': '#',
+            'Module 2': '',
+            'Module 3': '',
+            'Module 4': '',
           },
           notes: {
             'Module 1': '',
           },
           papers: {
-            2026: '#',2025: '#',2024: '#',2023: '#',2022: '#',
+            2026: '',
+            2025: '',
+            2024: 'https://drive.google.com/drive/folders/1BAsHXNikYLG5cBLje_6kvK5867D97ln7',
+            2023: '',
+            2022: '',
           },
         },
       },
@@ -52,15 +56,19 @@ window.COURSE_DATA = {
         links: {
           classes: {
             'Module 1': 'https://drive.google.com/file/d/1dq8t7j201DmkhLl5CorayiD2weAu5RzY/view?pli=1', 
-            'Module 2': '#',
-            'Module 3': '#',
-            'Module 4': '#',
+            'Module 2': '',
+            'Module 3': '',
+            'Module 4': '',
           },
           notes: {
             'Module 1': '',
           },
           papers: {
-            2026: '#',2025: '#',2024: '#',2023: '#',2022: '#',
+            2026: '',
+            2025: '',
+            2024: 'https://drive.google.com/drive/folders/1BAsHXNikYLG5cBLje_6kvK5867D97ln7',
+            2023: '',
+            2022: '',
           },
         },
        },
