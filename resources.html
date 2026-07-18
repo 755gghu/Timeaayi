@@ -171,6 +171,22 @@
   .panel[data-panel="notes"] .module-btn:hover { background: var(--yellow); }
   .panel[data-panel="papers"] .module-btn:hover { background: var(--orange); color: var(--white); }
 
+  /* Buttons with no URL yet — visibly inactive, no hover lift, no shadow travel */
+  .module-btn.module-btn--disabled {
+    background: var(--gray);
+    color: var(--black);
+    opacity: 0.45;
+    cursor: not-allowed;
+    box-shadow: 3px 3px 0px var(--black);
+  }
+  .module-btn.module-btn--disabled:hover,
+  .module-btn.module-btn--disabled:active {
+    transform: none;
+    box-shadow: 3px 3px 0px var(--black);
+    background: var(--gray);
+    color: var(--black);
+  }
+
   .empty {
     border: 3px dashed var(--black);
     padding: 40px 24px;
@@ -254,6 +270,7 @@
   </footer>
 
 <script src="assets/js/app.js"></script>
+<script src="data/manifest.js"></script>
 <script>
   // ---- Read selection from URL ----
   // select-course.html already sends both the machine key (university/course)
@@ -275,148 +292,28 @@
     `${courseLabel} · Semester ${semester} · ${universityLabel}`;
 
   // =====================================================================
-  // SYLLABUS DATA
-  // Real data below is sourced from University of Calicut syllabi (CUFYUGP
-  // Regulations 2024, w.e.f. 2024 admission) for BCA Honours and BSc Computer
-  // Science Honours. Only core/compulsory Major courses are listed per
-  // semester — Discipline Specific Elective "baskets" (specialisation tracks
-  // in sem 5–8) are collapsed to a single generic "Elective Course N" entry,
-  // and BSc CS's Minor/Multi-Disciplinary course slots (which depend on each
-  // student's individual pick, not a fixed CS subject) are omitted rather
-  // than guessed.
+  // COURSE DATA LOADING
+  // resources.html no longer contains any syllabus data itself.
+  // COURSE_MANIFEST (from data/manifest.js, loaded just above this script) maps
+  // "university:course" -> a data file. We load that one file with a
+  // dynamically-injected <script> tag, which populates window.COURSE_DATA.
   //
-  // Every other university/course combination in select-course.html
-  // (Anna University, University of Delhi, BCom, and both courses' elective
-  // specialisation tracks) has NO real syllabus behind it yet — those fall
-  // through to FALLBACK_SUBJECTS below. Swap in real data here once you have
-  // the syllabus PDFs for those too.
+  // Using a <script> tag (not fetch()) is deliberate: fetch() of a local
+  // file is blocked by the browser when the site is opened directly as
+  // file:// (no server), which is how this project is still tested
+  // locally. <script> tags aren't subject to that restriction, so this
+  // works identically both locally and once deployed.
+  //
+  // To add a new course: create /data/<uni>-<course>.js in the same shape
+  // (window.COURSE_DATA = { meta, semesters }), then add one line to
+  // data/manifest.js. Nothing here needs to change.
   // =====================================================================
-  const SYLLABUS = {
-    calicut: {
-      bca: {
-        1: [
-          { code: 'BCA1CJ101', name: 'Fundamentals of Computers and Computational Thinking' },
-          { code: 'BCA1CJ102', name: 'Mathematical Foundation for Computer Applications' },
-          { code: 'BCA1CJ103', name: 'Discrete Structures for Computer Applications' },
-          { code: 'BCA1FM105', name: 'Digital Marketing' },
-          { code: 'BCA1FS111', name: 'Introduction to Computers and Office Automation' },
-          { code: 'ENG1FA101', name: 'English' },
-        ],
-        2: [
-          { code: 'BCA2CJ101', name: 'Fundamentals of Programming (C Language)' },
-          { code: 'BCA2CJ102', name: 'Statistical Foundation for Computer Applications' },
-          { code: 'BCA2CJ103', name: 'Numerical Analysis and Optimization Techniques' },
-          { code: 'BCA2FS112', name: 'Data Analysis using Spread Sheet' },
-          { code: 'ENG2FA103', name: 'English' },
-        ],
-        3: [
-          { code: 'BCA3CJ201', name: 'Data Structures using C' },
-          { code: 'BCA3CJ202', name: 'Computer Networks' },
-          { code: 'BCA3CJ203', name: 'Introduction to Data Science' },
-          { code: 'BCA3CJ204', name: 'Foundations of Artificial Intelligence' },
-          { code: 'BCA3FS113', name: 'Website Designing using Content Management System' },
-          { code: 'BCA3MDE102', name: 'Kerala Knowledge System' },
-        ],
-        4: [
-          { code: 'BCA4CJ205', name: 'Database Management System' },
-          { code: 'BCA4CJ206', name: 'Python Programming' },
-          { code: 'BCA4CJ207', name: 'Software Engineering' },
-          { code: 'BCA4CJ208', name: 'Automation and Robotics' },
-          { code: 'BCA4FV108', name: 'Introduction to Cyber Laws' },
-          { code: 'ENG4FV109', name: 'English' },
-        ],
-        5: [
-          { code: 'BCA5CJ301', name: 'Object Oriented Programming (Java)' },
-          { code: 'BCA5CJ302', name: 'Progressive Web Application using PHP' },
-          { code: 'BCA5CJ303', name: 'Digital Fundamentals and Computer Organization' },
-          { code: 'BCA5EJ301', name: 'Elective Course 1 in Major' },
-          { code: 'BCA5EJ302', name: 'Elective Course 2 in Major' },
-        ],
-        6: [
-          { code: 'BCA6CJ304', name: 'Introduction to AI and ML' },
-          { code: 'BCA6CJ305', name: 'Principles of Operating System' },
-          { code: 'BCA6EJ303', name: 'Elective Course 3 in Major' },
-          { code: 'BCA6EJ304', name: 'Elective Course 4 in Major' },
-          { code: 'BCA6FV110', name: 'Business Intelligence and Innovation' },
-        ],
-        7: [
-          { code: 'BCA7CJ401', name: 'Advanced Data Structures and Algorithms' },
-          { code: 'BCA7CJ402', name: 'Data Science Programming using R' },
-          { code: 'BCA7EJ401', name: 'Elective Course 5 in Major' },
-          { code: 'BCA7EJ402', name: 'Elective Course 6 in Major' },
-          { code: 'BCA7OE401', name: 'Open Elective in Major' },
-        ],
-        8: [
-          { code: 'BCA8EJ404', name: 'Elective Course 8 in Major' },
-          { code: 'BCA8EJ405', name: 'Elective Course 9 in Major' },
-          { code: 'BCA8EJ406', name: 'Elective Course 10 in Major' },
-          { code: 'BCA8FS118', name: 'Project' },
-        ],
-      },
-      // BSc Computer Science Honours — same CUFYUGP 2024 scheme, from BSc_2024.pdf.
-      // Minor-discipline courses ("Minor Course 1", etc.) are skipped since they
-      // depend on each student's chosen minor and aren't fixed CS subjects.
-      bsc_cs: {
-        1: [
-          { code: 'CSC1CJ101', name: 'Fundamentals of Computers & Computational Thinking' },
-          { code: 'ENG1FA101', name: 'English' },
-        ],
-        2: [
-          { code: 'CSC2CJ101', name: 'Fundamentals of Programming (C Language)' },
-          { code: 'ENG2FA103', name: 'English' },
-        ],
-        3: [
-          { code: 'CSC3CJ201', name: 'Software Project Management' },
-          { code: 'CSC3CJ202', name: 'Data Structures and Algorithm' },
-          { code: 'XXX3FM107', name: 'Kerala Knowledge System' },
-          { code: 'ENG3FV108', name: 'Value-Added Course 1' },
-        ],
-        4: [
-          { code: 'CSC4CJ203', name: 'Database Management System' },
-          { code: 'CSC4CJ204', name: 'Python Programming' },
-          { code: 'CSC4CJ205', name: 'Computer Networks' },
-          { code: 'ENG4FV109', name: 'Value-Added Course 2' },
-          { code: 'XXX4FV110', name: 'Value-Added Course 3' },
-          { code: 'ENG4FS111', name: 'Skill Enhancement Course 1 (P)' },
-        ],
-        5: [
-          { code: 'CSC5CJ301', name: 'Data Mining' },
-          { code: 'CSC5CJ302', name: 'Object Oriented Programming (Java)' },
-          { code: 'CSC5CJ303', name: 'Full Stack Web Development' },
-          { code: 'CSC5EJ305', name: 'Elective Course 1 in Major' },
-          { code: 'CSC5EJ306', name: 'Elective Course 2 in Major' },
-          { code: 'CSC5FS112', name: 'Introduction to Digital Marketing' },
-        ],
-        6: [
-          { code: 'CSC6CJ304', name: 'Digital Electronics and Computer Architecture' },
-          { code: 'CSC6CJ305', name: 'Principles of Operating Systems' },
-          { code: 'CSC6CJ306', name: 'Introduction to Artificial Intelligence & Machine Learning' },
-          { code: 'CSC6CJ311', name: 'Elective Course 3 in Major' },
-          { code: 'CSC6CJ312', name: 'Elective Course 4 in Major' },
-          { code: 'CSC6FS113', name: 'Project Implementation' },
-          { code: 'CSC6CJ349', name: 'Internship in Major' },
-        ],
-        7: [
-          { code: 'CSC7CJ401', name: 'Theory of Computation' },
-          { code: 'CSC7CJ402', name: 'System Security' },
-          { code: 'CSC7CJ403', name: 'Advanced Data Structures and Algorithms' },
-          { code: 'CSC7CJ404', name: 'Block Chain Technology' },
-          { code: 'CSC7CJ405', name: 'Internet of Things' },
-        ],
-        8: [
-          { code: 'CSC8CJ406', name: 'Compiler Design' },
-          { code: 'CSC8CJ407', name: 'Client-Server Architecture' },
-          { code: 'CSC8CJ408', name: 'Parallel Computing' },
-          { code: 'CSC8EJXXX-5', name: 'Elective Course 5 in Major' },
-          { code: 'CSC8EJXXX-6', name: 'Elective Course 6 in Major' },
-          { code: 'CSC8EJXXX-7', name: 'Elective Course 7 in Major' },
-        ],
-      },
-    },
-  };
+  const manifestKey = `${universityKey}:${courseKey}`;
+  const dataFilePath = window.COURSE_MANIFEST ? window.COURSE_MANIFEST[manifestKey] : undefined;
 
-  // Used whenever SYLLABUS has no entry for the chosen university/course.
-  // Clearly labeled as placeholder so it's obvious in the UI it isn't real.
+  // Used whenever the manifest has no entry for the chosen university/course
+  // (e.g. it hasn't been built yet). Clearly labeled as placeholder so it's
+  // obvious in the UI it isn't real.
   function fallbackSubjects(sem) {
     return [
       { code: `SUB${sem}01`, name: 'Subject 1 (placeholder — add real syllabus)' },
@@ -426,17 +323,7 @@
     ];
   }
 
-  let usingFallback = false;
-  function getSubjects() {
-    const bySem = SYLLABUS[universityKey]?.[courseKey]?.[semester];
-    if (bySem) return bySem;
-    usingFallback = true;
-    return fallbackSubjects(semester);
-  }
-
-  const subjects = getSubjects();
-
-  if (usingFallback) {
+  function showFallbackFlag() {
     document.getElementById('fallbackFlag').innerHTML =
       `<span class="fallback-flag">⚠ Placeholder subjects — real syllabus not added for this university/course yet</span>`;
   }
@@ -444,22 +331,34 @@
   // ---- Module / year labels for the 5 buttons per subject ----
   const MODULES = ['Module 1', 'Module 2', 'Module 3', 'Module 4', 'Module 5'];
 
+  // Fallback only — used for placeholder subjects that have no course data
+  // (and therefore no meta.paperYears) behind them at all.
   const CURRENT_YEAR = new Date().getFullYear();
-  const YEARS = Array.from({ length: 5 }, (_, i) => CURRENT_YEAR - i); // last 5 years, newest first
+  const DEFAULT_YEARS = Array.from({ length: 5 }, (_, i) => CURRENT_YEAR - i);
 
   // ---- Render a subject list for one tab ----
   // kind: 'classes' | 'notes' | 'papers' — determines button labels and tag color (via CSS)
-  function renderSubjectList(gridId, kind) {
+  // years: the specific year list to use for the 'papers' tab (from
+  //   COURSE_DATA.meta.paperYears when real course data is loaded).
+  function renderSubjectList(gridId, kind, subjects, years) {
     const grid = document.getElementById(gridId);
     if (!subjects.length) {
       grid.innerHTML = `<div class="empty">Nothing uploaded here yet. Check back soon, or be the first to add one.</div>`;
       return;
     }
 
+    const labels = kind === 'papers' ? years : MODULES;
+
     grid.innerHTML = subjects.map(sub => {
-      const buttons = (kind === 'papers' ? YEARS : MODULES)
-        .map(label => `<a href="#" class="module-btn" data-subject="${sub.code}" data-kind="${kind}" data-item="${label}">${label}</a>`)
-        .join('');
+      const buttons = labels.map(label => {
+        const url = sub.links?.[kind]?.[label];
+        if (url) {
+          // Real file — normal working link, opens in a new tab.
+          return `<a href="${url}" target="_blank" rel="noopener" class="module-btn">${label}</a>`;
+        }
+        // No URL yet — render as inert, visibly disabled, no dead href.
+        return `<span class="module-btn module-btn--disabled" title="Not added yet">${label}</span>`;
+      }).join('');
 
       return `
         <div class="subject-card">
@@ -471,38 +370,56 @@
     }).join('');
   }
 
-  renderSubjectList('gridClasses', 'classes');
-  renderSubjectList('gridNotes', 'notes');
-  renderSubjectList('gridPapers', 'papers');
+  // ---- Once we have subjects (real or fallback), render the whole page ----
+  function renderPage(subjects, syllabusUrl, years) {
+    const paperYears = years || DEFAULT_YEARS;
+    renderSubjectList('gridClasses', 'classes', subjects, paperYears);
+    renderSubjectList('gridNotes', 'notes', subjects, paperYears);
+    renderSubjectList('gridPapers', 'papers', subjects, paperYears);
 
-  document.getElementById('countClasses').textContent = subjects.length;
-  document.getElementById('countNotes').textContent = subjects.length;
-  document.getElementById('countPapers').textContent = subjects.length;
+    document.getElementById('countClasses').textContent = subjects.length;
+    document.getElementById('countNotes').textContent = subjects.length;
+    document.getElementById('countPapers').textContent = subjects.length;
 
-  // ---- Placeholder click handling ----
-  // Every module/year button and the syllabus button are placeholders
-  // (href="#") until real file URLs / an API exist. Clicking just logs
-  // what was requested — swap this for real navigation once resources
-  // are actually hosted somewhere.
-  document.querySelectorAll('.module-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      console.log(`Requested ${btn.dataset.kind} → ${btn.dataset.subject} → ${btn.dataset.item}`);
+    // Buttons with a real link (rendered as <a>) navigate normally — no JS
+    // needed. Buttons with no link yet are rendered as inert <span>s (see
+    // renderSubjectList), so there's nothing to wire up for those either.
+
+    document.getElementById('syllabusBtn').addEventListener('click', (e) => {
+      if (syllabusUrl) {
+        window.open(syllabusUrl, '_blank');
+      } else {
+        e.preventDefault();
+        const note = document.getElementById('syllabusNote');
+        if (note) note.classList.toggle('show');
+      }
     });
-  });
-
-  document.getElementById('syllabusBtn').addEventListener('click', (e) => {
-  // Check if the selected university is Calicut and the course is BCA
-  if (universityKey === 'calicut' && courseKey === 'bca') {
-    // Let the browser open the URL naturally (or forcefully if you want a new tab)
-    window.open('https://drive.google.com/file/d/1dq8t7j201DmkhLl5CorayiD2weAu5RzY/view?pli=1', '_blank');
-  } else {
-    // Fallback behavior for other courses/universities
-    e.preventDefault();
-    const note = document.getElementById('syllabusNote');
-    if (note) note.classList.toggle('show');
   }
-});
+
+  if (dataFilePath) {
+    // Real course data exists — load it, then render from it.
+    const script = document.createElement('script');
+    script.src = dataFilePath;
+    script.onload = () => {
+      const subjects = (window.COURSE_DATA && window.COURSE_DATA.semesters[semester]) || [];
+      if (!subjects.length) showFallbackFlag();
+      renderPage(
+        subjects.length ? subjects : fallbackSubjects(semester),
+        window.COURSE_DATA?.meta?.syllabusUrl,
+        window.COURSE_DATA?.meta?.paperYears
+      );
+    };
+    script.onerror = () => {
+      // Data file listed in the manifest but failed to load (e.g. typo'd path).
+      showFallbackFlag();
+      renderPage(fallbackSubjects(semester), null);
+    };
+    document.head.appendChild(script);
+  } else {
+    // No manifest entry for this university/course yet.
+    showFallbackFlag();
+    renderPage(fallbackSubjects(semester), null);
+  }
 
   // ---- Tabs ----
   const tabs = document.querySelectorAll('.tab');
