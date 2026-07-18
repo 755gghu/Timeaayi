@@ -211,32 +211,22 @@
 
 <script src="assets/js/app.js"></script>
 <script>
-  // ---- Mock data ----
-  // Placeholder dataset. Swap DATA for a real API response later —
-  // the render logic below only assumes this shape:
+  // ---- University / course dropdown data ----
+  // Deliberately trimmed to only the courses that have real syllabus data
+  // behind them in /data (see data/manifest.js). Keeping this list in sync
+  // with the manifest is what stops a student from picking a course that
+  // dead-ends on a placeholder resources page.
+  //
+  // To add a course once you've built its data file:
+  // 1. Add an entry here (label + semester count).
+  // 2. Add the matching line to data/manifest.js.
   // { university: { label, courses: { course: { label, semesters: n } } } }
   const DATA = {
     calicut: {
       label: "University of Calicut",
       courses: {
-        bsc_cs: { label: "B.Sc. Computer Science", semesters: 8 }, // was 6 — real syllabus (CUFYUGP 2024) runs 8 semesters
-        bca: { label: "BCA", semesters: 8 }, // was 6 — real syllabus (CUFYUGP 2024) runs 8 semesters
-        bcom: { label: "B.Com", semesters: 6 },
-      },
-    },
-    anna: {
-      label: "Anna University",
-      courses: {
-        btech_cse: { label: "B.Tech CSE", semesters: 8 },
-        btech_ece: { label: "B.Tech ECE", semesters: 8 },
-        mca: { label: "MCA", semesters: 4 },
-      },
-    },
-    delhi: {
-      label: "University of Delhi",
-      courses: {
-        ba_eco: { label: "B.A. (Hons) Economics", semesters: 6 },
-        bsc_math: { label: "B.Sc. (Hons) Mathematics", semesters: 6 },
+        bca: { label: "BCA", semesters: 8 },
+        bsc_cs: { label: "B.Sc. Computer Science", semesters: 8 },
       },
     },
   };
