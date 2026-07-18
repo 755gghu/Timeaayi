@@ -35,7 +35,7 @@ window.COURSE_DATA = {
         name: 'Fundamentals of Computers and Computational Thinking',
         links: {
           classes: {
-            'Module 1': 'https://drive.google.com/file/d/1dq8t7j201DmkhLl5CorayiD2weAu5RzY/view?pli=1', 
+            'Module 1': '', 
             'Module 2': '',
             'Module 3': '',
             'Module 4': '',
@@ -46,7 +46,7 @@ window.COURSE_DATA = {
           papers: {
             2026: '',
             2025: '',
-            2024: 'https://drive.google.com/drive/folders/1BAsHXNikYLG5cBLje_6kvK5867D97ln7',
+            2024: 'https://drive.google.com/file/d/1_WbqUEjfqEGH6BA6RBw6sGaYGvnX1vJx/view?usp=drive_link',
             2023: '',
             2022: '',
           },
@@ -55,7 +55,7 @@ window.COURSE_DATA = {
       { code: 'BCA1CJ102', name: 'Mathematical Foundation for Computer Applications',
         links: {
           classes: {
-            'Module 1': 'https://drive.google.com/file/d/1dq8t7j201DmkhLl5CorayiD2weAu5RzY/view?pli=1', 
+            'Module 1': '', 
             'Module 2': '',
             'Module 3': '',
             'Module 4': '',
@@ -66,7 +66,7 @@ window.COURSE_DATA = {
           papers: {
             2026: '',
             2025: '',
-            2024: 'https://drive.google.com/drive/folders/1BAsHXNikYLG5cBLje_6kvK5867D97ln7',
+            2024: 'https://drive.google.com/file/d/1kkmQxdKKoB83So80pjSWZo-0JmpFW2WT/view?usp=drive_link',
             2023: '',
             2022: '',
           },
