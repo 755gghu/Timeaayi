@@ -36,7 +36,7 @@ window.COURSE_DATA = {
         links: {
           classes: {
             'Module 1': '', 
-            'Module 2': '',
+            'Module 2': '#',
             'Module 3': '',
             'Module 4': '',
           },
