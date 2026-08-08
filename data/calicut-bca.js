@@ -35,8 +35,8 @@ window.COURSE_DATA = {
         name: 'Fundamentals of Computers and Computational Thinking',
         links: {
           classes: {
-            'Module 1': '', 
-            'Module 2': '',
+            'Module 1': 'https://youtu.be/wap4_vjPwPY?si=FrPeFdCp7MwZbs3U', 
+            'Module 2': 'https://youtu.be/3Mk0MeNUQ14?si=H0SnPiuWaiVGU6mm',
             'Module 3': '',
             'Module 4': '',
           },
