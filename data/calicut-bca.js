@@ -19,7 +19,7 @@ window.COURSE_DATA = {
     // Fixed on purpose — edit this list directly rather than relying on
     // "today's year minus N", since past papers are tied to real years,
     // not a rolling window.
-    paperYears: [2037,2036,2035,2034,2033, 2032, 2031,2030,2029,2028,2027,2026, 2025, 2024, 2023, 2022],
+    paperYears: [2026, 2025, 2024, 2023, 2022],
   },
   semesters: {
     1: [
