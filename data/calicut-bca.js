@@ -19,7 +19,7 @@ window.COURSE_DATA = {
     // Fixed on purpose — edit this list directly rather than relying on
     // "today's year minus N", since past papers are tied to real years,
     // not a rolling window.
-    paperYears: [2026, 2025, 2024, 2023, 2022],
+    paperYears: [2027,2026, 2025, 2024, 2023, 2022],
   },
   semesters: {
     1: [
@@ -36,7 +36,7 @@ window.COURSE_DATA = {
         links: {
           classes: {
             'Module 1': '', 
-            'Module 2': '#',
+            'Module 2': '',
             'Module 3': '',
             'Module 4': '',
           },
@@ -44,6 +44,7 @@ window.COURSE_DATA = {
             'Module 1': '',
           },
           papers: {
+            2027: '',
             2026: '',
             2025: '',
             2024: 'https://drive.google.com/file/d/1_WbqUEjfqEGH6BA6RBw6sGaYGvnX1vJx/view?usp=drive_link',
